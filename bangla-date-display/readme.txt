@@ -3,7 +3,7 @@ Contributors: imran2w
 Developer link: https://imran.link
 Tags: Bangla, Bengali, Bangla Date, Bangla Calendar, Bangla Archive, Bangladesh, Bangla Time, Bangla Season, Hijri Date
 Requires at least: 3.0
-Tested up to: 6.6
+Tested up to: 6.7
 Stable tag: 9.4
 Requires PHP: 5.6
 License: GPLv2 or later
