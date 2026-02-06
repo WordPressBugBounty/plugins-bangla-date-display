@@ -3,8 +3,8 @@ Contributors: imran2w
 Developer link: https://imran.link
 Tags: Bangla, Bengali, Bangla Date, Bangla Calendar, Bangla Archive, Bangladesh, Bangla Time, Bangla Season, Hijri Date
 Requires at least: 3.0
-Tested up to: 6.7
-Stable tag: 9.4
+Tested up to: 6.9
+Stable tag: 9.4.1
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -46,7 +46,7 @@ Displays Bangla, Gregorian and Hijri date, Archive Calendar, time, name of the d
 
 = Credits =
 * Developer: [ALI IMRAN](https://facebook.com/imran2w)
-* E-Mail: imran2w@gmail.com
+* E-Mail: imran4dev@gmail.com
 * Website: [imran.link](https://imran.link)
 
 = Thanks to =
