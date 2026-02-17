@@ -1,21 +1,44 @@
 <?php
-defined( 'ABSPATH' )or die( 'Stop! You can not do this!' );
+/**
+ * Bangla Date Display Widget
+ *
+ * @package Bangla_Date_Display
+ */
 
-add_action( 'widgets_init', function() {
+defined( 'ABSPATH' ) || exit;
+
+/**
+ * Register the widget.
+ */
+function bddp_register_widgets() {
 	register_widget( 'Widget_Bangla_Date_Display' );
-});
+}
+add_action( 'widgets_init', 'bddp_register_widgets' );
 
+/**
+ * Widget class for Bangla Date Display.
+ */
 class Widget_Bangla_Date_Display extends WP_Widget {
-	function __construct() {
+
+	/**
+	 * Constructor.
+	 */
+	public function __construct() {
 		parent::__construct(
 			'bangla_date_display',
-			'Bangla Date Display',
+			__( 'Bangla Date Display', 'bddp' ),
 			array(
-				'description' => __( 'Displays Bangla, Gregorian & Hijri date, time, day and season name.' )
+				'description' => __( 'Displays Bangla, Gregorian & Hijri date, time, day and season name.', 'bddp' ),
+				'classname'   => 'widget-bangla-date-display',
 			)
 		);
 	}
-	
+
+	/**
+	 * Default widget arguments.
+	 *
+	 * @var array
+	 */
 	public $args = array(
 		'before_title'  => '<h4 class="widgettitle">',
 		'after_title'   => '</h4>',
@@ -23,119 +46,190 @@ class Widget_Bangla_Date_Display extends WP_Widget {
 		'after_widget'  => '</div></div>',
 	);
 
-	function widget( $args, $instance ) {
+	/**
+	 * Outputs the widget content.
+	 *
+	 * @param array $args     Display arguments.
+	 * @param array $instance Settings for the current widget instance.
+	 */
+	public function widget( $args, $instance ) {
+		$bool_keys = array( 'day', 'time', 'en_date', 'hijri_date', 'bn_date', 'season' );
+		foreach ( $bool_keys as $key ) {
+			if ( empty( $instance[ $key ] ) ) {
+				$instance[ $key ] = '';
+			}
+		}
 
-        $boolKeys = ['day', 'time', 'en_date', 'hijri_date', 'bn_date', 'season'];
-        foreach($boolKeys as $key) {
-            if ( empty( $instance[$key] ) ) {
-                $instance[$key] = '';
-            }
-        }
-
-        //-
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $args['before_widget'];
+		
 		if ( ! empty( $instance['title'] ) ) {
 			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'];
 		}
 
 		echo '<div class="textwidget">';
-            echo "<ul>";
-                if ( $instance[ 'day' ] == "1" || $instance[ 'time' ] == "1" ) {
-                    echo "<li>";
-                }
-                if ( $instance[ 'day' ] == "1" ) {
-                    echo render_bangla_day();
-                }
-                if ( $instance[ 'time' ] == "1" ) {
-                    echo " (";
-                    echo render_bangla_clock();
-                    echo ")";
-                }
-                if ( $instance[ 'day' ] == "1" || $instance[ 'time' ] == "1" ) {
-                    echo "</li>";
-                }
-                if ( $instance[ 'en_date' ] == "1" ) {
-                    echo "<li>";
-                    echo render_gregorian_date();
-                    echo "</li>";
-                }
-                if ( $instance[ 'hijri_date' ] == "1" ) {
-                    echo "<li>";
-                    echo render_hijri_date();
-                    echo "</li>";
-                }
-                if ( $instance[ 'bn_date' ] == "1" || $instance[ 'season' ] == "1" ) {
-                    echo "<li>";
-                }
-                if ( $instance[ 'bn_date' ] == "1" ) {
-                    echo render_bangla_date();
-                }
-                if ( $instance[ 'season' ] == "1" ) {
-                    echo " (";
-                    echo bddp_bn_season();
-                    echo ")";
-                }
-                if ( $instance[ 'bn_date' ] == "1" || $instance[ 'season' ] == "1" ) {
-                    echo "</li>";
-                }
-            echo "</ul>";
+		echo '<ul>';
+
+		if ( '1' === $instance['day'] || '1' === $instance['time'] ) {
+			echo '<li>';
+		}
+		if ( '1' === $instance['day'] ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo render_bangla_day();
+		}
+		if ( '1' === $instance['time'] ) {
+			echo ' (';
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo render_bangla_clock();
+			echo ')';
+		}
+		if ( '1' === $instance['day'] || '1' === $instance['time'] ) {
+			echo '</li>';
+		}
+
+		if ( '1' === $instance['en_date'] ) {
+			echo '<li>';
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo render_gregorian_date();
+			echo '</li>';
+		}
+
+		if ( '1' === $instance['hijri_date'] ) {
+			echo '<li>';
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo render_hijri_date();
+			echo '</li>';
+		}
+
+		if ( '1' === $instance['bn_date'] || '1' === $instance['season'] ) {
+			echo '<li>';
+		}
+		if ( '1' === $instance['bn_date'] ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo render_bangla_date();
+		}
+		if ( '1' === $instance['season'] ) {
+			echo ' (';
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo bddp_bn_season();
+			echo ')';
+		}
+		if ( '1' === $instance['bn_date'] || '1' === $instance['season'] ) {
+			echo '</li>';
+		}
+
+		echo '</ul>';
 		echo '</div>';
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $args['after_widget'];
 	}
 	
-	public function getAttr($instance, $key) {
-		return [
-			'value' => ! empty( $instance[$key] ) ? $instance[$key] : esc_html__( '', 'bddp' ),
-			'id' => esc_attr( $this->get_field_id( $key ) ),
-			'name' => esc_attr( $this->get_field_name( $key ) )
-		];
+	/**
+	 * Get field attributes for form rendering.
+	 *
+	 * @param array  $instance Widget instance settings.
+	 * @param string $key      Field key.
+	 * @return array Field attributes.
+	 */
+	private function get_field_attr( $instance, $key ) {
+		$instance_defaults = array(
+			'title'      => 'আজকের দিন-তারিখ',
+			'day'        => '1',
+			'time'       => '1',
+			'en_date'    => '1',
+			'hijri_date' => '1',
+			'bn_date'    => '1',
+			'season'     => '1',
+		);
+
+		if ( ! isset( $instance[ $key ] ) ) {
+			$instance[ $key ] = $instance_defaults[ $key ];
+		}
+
+		return array(
+			'value' => ! empty( $instance[ $key ] ) ? $instance[ $key ] : '',
+			'id'    => esc_attr( $this->get_field_id( $key ) ),
+			'name'  => esc_attr( $this->get_field_name( $key ) ),
+		);
 	}
 
-	function form( $instance ) {
-		$title = $this->getAttr($instance, 'title');
-		$day = $this->getAttr($instance, 'day');
-		$time = $this->getAttr($instance, 'time');
-		$en_date = $this->getAttr($instance, 'en_date');
-		$hijri_date = $this->getAttr($instance, 'hijri_date');
-		$bn_date = $this->getAttr($instance, 'bn_date');
-		$season = $this->getAttr($instance, 'season');
+	/**
+	 * Outputs the settings form for the widget.
+	 *
+	 * @param array $instance Current widget instance settings.
+	 */
+	public function form( $instance ) {
+		$title      = $this->get_field_attr( $instance, 'title' );
+		$day        = $this->get_field_attr( $instance, 'day' );
+		$time       = $this->get_field_attr( $instance, 'time' );
+		$en_date    = $this->get_field_attr( $instance, 'en_date' );
+		$hijri_date = $this->get_field_attr( $instance, 'hijri_date' );
+		$bn_date    = $this->get_field_attr( $instance, 'bn_date' );
+		$season     = $this->get_field_attr( $instance, 'season' );
 		?>
 		<p>
-			<label for="<?= $title['id'] ?>"><?php echo esc_html__( 'Title:', 'bddp' ); ?></label>
-			<input class="widefat" id="<?= $title['id'] ?>" name="<?= $title['name'] ?>" type="text" value="<?= $title['value'] ?>">
+			<label for="<?php echo esc_attr( $title['id'] ); ?>">
+				<?php esc_html_e( 'Title:', 'bddp' ); ?>
+			</label>
+			<input class="widefat" id="<?php echo esc_attr( $title['id'] ); ?>" name="<?php echo esc_attr( $title['name'] ); ?>" type="text" value="<?php echo esc_attr( $title['value'] ); ?>">
 		</p>
-        <p>
-            <label for="<?= $day['id'] ?>"><input type="checkbox" id="<?= $day['id'] ?>" name="<?= $day['name'] ?>" value="1"<?= ($day['value']=='1'?' checked':'') ?>/>Day</label>
-        </p>
-        <p>
-            <label for="<?= $time['id'] ?>"><input type="checkbox" id="<?= $time['id'] ?>" name="<?= $time['name'] ?>" value="1"<?= ($time['value']=='1'?' checked':'') ?>/>Time</label>
-        </p>
-        <p>
-            <label for="<?= $en_date['id'] ?>"><input type="checkbox" id="<?= $en_date['id'] ?>" name="<?= $en_date['name'] ?>" value="1"<?= ($en_date['value']=='1'?' checked':'') ?>/>Gregorian Date</label>
-        </p>
-        <p>
-            <label for="<?= $hijri_date['id'] ?>"><input type="checkbox" id="<?= $hijri_date['id'] ?>" name="<?= $hijri_date['name'] ?>" value="1"<?= ($hijri_date['value']=='1'?' checked':'') ?>/>Hijri Date</label>
-        </p>
-        <p>
-            <label for="<?= $bn_date['id'] ?>"><input type="checkbox" id="<?= $bn_date['id'] ?>" name="<?= $bn_date['name'] ?>" value="1"<?= ($bn_date['value']=='1'?' checked':'') ?>/>Bangla Date</label>
-        </p>
-        <p>
-            <label for="<?= $season['id'] ?>"><input type="checkbox" id="<?= $season['id'] ?>" name="<?= $season['name'] ?>" value="1"<?= ($season['value']=='1'?' checked':'') ?>/>Season Name</label>
-        </p>
+		<p>
+			<label for="<?php echo esc_attr( $day['id'] ); ?>">
+				<input type="checkbox" id="<?php echo esc_attr( $day['id'] ); ?>" name="<?php echo esc_attr( $day['name'] ); ?>" value="1" <?php checked( $day['value'], '1' ); ?> />
+				<?php esc_html_e( 'Day', 'bddp' ); ?>
+			</label>
+		</p>
+		<p>
+			<label for="<?php echo esc_attr( $time['id'] ); ?>">
+				<input type="checkbox" id="<?php echo esc_attr( $time['id'] ); ?>" name="<?php echo esc_attr( $time['name'] ); ?>" value="1" <?php checked( $time['value'], '1' ); ?> />
+				<?php esc_html_e( 'Time', 'bddp' ); ?>
+			</label>
+		</p>
+		<p>
+			<label for="<?php echo esc_attr( $en_date['id'] ); ?>">
+				<input type="checkbox" id="<?php echo esc_attr( $en_date['id'] ); ?>" name="<?php echo esc_attr( $en_date['name'] ); ?>" value="1" <?php checked( $en_date['value'], '1' ); ?> />
+				<?php esc_html_e( 'Gregorian Date', 'bddp' ); ?>
+			</label>
+		</p>
+		<p>
+			<label for="<?php echo esc_attr( $hijri_date['id'] ); ?>">
+				<input type="checkbox" id="<?php echo esc_attr( $hijri_date['id'] ); ?>" name="<?php echo esc_attr( $hijri_date['name'] ); ?>" value="1" <?php checked( $hijri_date['value'], '1' ); ?> />
+				<?php esc_html_e( 'Hijri Date', 'bddp' ); ?>
+			</label>
+		</p>
+		<p>
+			<label for="<?php echo esc_attr( $bn_date['id'] ); ?>">
+				<input type="checkbox" id="<?php echo esc_attr( $bn_date['id'] ); ?>" name="<?php echo esc_attr( $bn_date['name'] ); ?>" value="1" <?php checked( $bn_date['value'], '1' ); ?> />
+				<?php esc_html_e( 'Bangla Date', 'bddp' ); ?>
+			</label>
+		</p>
+		<p>
+			<label for="<?php echo esc_attr( $season['id'] ); ?>">
+				<input type="checkbox" id="<?php echo esc_attr( $season['id'] ); ?>" name="<?php echo esc_attr( $season['name'] ); ?>" value="1" <?php checked( $season['value'], '1' ); ?> />
+				<?php esc_html_e( 'Season Name', 'bddp' ); ?>
+			</label>
+		</p>
 		<?php
 	}
 
-	function update( $new_instance, $old_instance ) {
+	/**
+	 * Updates a particular instance of the widget.
+	 *
+	 * @param array $new_instance New settings for this instance.
+	 * @param array $old_instance Old settings for this instance.
+	 * @return array Updated settings.
+	 */
+	public function update( $new_instance, $old_instance ) {
 		$instance = array();
-		$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : 'আজকের দিন-তারিখ';
-		$instance['day'] = ( ! empty( $new_instance['day'] ) ) ? strip_tags( $new_instance['day'] ) : '0';
-		$instance['time'] = ( ! empty( $new_instance['time'] ) ) ? strip_tags( $new_instance['time'] ) : '0';
-		$instance['en_date'] = ( ! empty( $new_instance['en_date'] ) ) ? strip_tags( $new_instance['en_date'] ) : '0';
-		$instance['hijri_date'] = ( ! empty( $new_instance['hijri_date'] ) ) ? strip_tags( $new_instance['hijri_date'] ) : '0';
-		$instance['bn_date'] = ( ! empty( $new_instance['bn_date'] ) ) ? strip_tags( $new_instance['bn_date'] ) : '0';
-		$instance['season'] = ( ! empty( $new_instance['season'] ) ) ? strip_tags( $new_instance['season'] ) : '0';
+
+		$instance['title']      = ! empty( $new_instance['title'] ) ? sanitize_text_field( $new_instance['title'] ) : 'আজকের দিন-তারিখ';
+		$instance['day']        = ! empty( $new_instance['day'] ) ? '1' : '0';
+		$instance['time']       = ! empty( $new_instance['time'] ) ? '1' : '0';
+		$instance['en_date']    = ! empty( $new_instance['en_date'] ) ? '1' : '0';
+		$instance['hijri_date'] = ! empty( $new_instance['hijri_date'] ) ? '1' : '0';
+		$instance['bn_date']    = ! empty( $new_instance['bn_date'] ) ? '1' : '0';
+		$instance['season']     = ! empty( $new_instance['season'] ) ? '1' : '0';
+
 		return $instance;
 	}
 }
-
-?>

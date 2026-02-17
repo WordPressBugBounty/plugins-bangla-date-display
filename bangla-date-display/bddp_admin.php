@@ -82,6 +82,7 @@ function bddp_options_page() {
 
 			?>
 			
+			<h2>Post/Page & Comment Section</h2>
 			<table class="form-table" role="presentation">
 				<tbody>
 					<tr>
@@ -312,10 +313,10 @@ function bddp_options_page() {
 				<table class="form-table">
 					<tr valign="top">
 						<td style="width: 80px;">
-							<a href="http://facebook.com/imran2w" target="_blank"><img src="http://www.gravatar.com/avatar/<?php echo md5( "imran4dev@gmail.com" ); ?>" /></a>
+							<a href="https://facebook.com/imran2w" target="_blank"><img src="https://www.gravatar.com/avatar/<?php echo md5( "imran4dev@gmail.com" ); ?>" /></a>
 						</td>
 						<td>
-							<p>Developer: <a href="http://facebook.com/imran2w" target="_blank">M.A. IMRAN</a><br/>Facebook: <a href="http://facebook.com/imran2w" target="_blank">http://facebook.com/imran2w</a><br/> E-Mail: <a href="mailto:imran4dev@gmail.com">imran4dev@gmail.com</a><br/> Web: <a href="http://imran.link" target="_blank">www.imran.link</a>
+							<p>Developer: <a href="https://facebook.com/imran2w" target="_blank">ALI IMRAN</a><br/>Facebook: <a href="https://facebook.com/imran2w" target="_blank">https://facebook.com/imran2w</a><br/> E-Mail: <a href="mailto:imran4dev@gmail.com">imran4dev@gmail.com</a><br/> Web: <a href="https://imran.link" target="_blank">https://www.imran.link</a>
 							</p>
 						</td>
 					</tr>
@@ -341,6 +342,4 @@ function bddp_options_page() {
 	function register_bddp_settings() {
 		register_setting( 'bddp-settings-group', 'bddp_options' );
 	}
-
-
 ?>

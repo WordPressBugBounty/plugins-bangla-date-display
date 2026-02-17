@@ -4,7 +4,7 @@ Developer link: https://imran.link
 Tags: Bangla, Bengali, Bangla Date, Bangla Calendar, Bangla Archive, Bangladesh, Bangla Time, Bangla Season, Hijri Date
 Requires at least: 3.0
 Tested up to: 6.9
-Stable tag: 9.4.1
+Stable tag: 9.4.2
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
