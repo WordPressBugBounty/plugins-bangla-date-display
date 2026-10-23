@@ -3,7 +3,7 @@ Contributors: imran2w
 Developer link: https://imran.link
 Tags: Bangla, Bangla Date, Bangla Calendar, Bangla Time, Hijri Date
 Requires at least: 3.0
-Tested up to: 7.0
+Tested up to: 7.1
 Stable tag: 10.1.0
 Requires PHP: 5.6
 License: GPLv2 or later
@@ -38,6 +38,7 @@ Displays Bangla, Gregorian and Hijri date, Archive Calendar, time, name of the d
 = 10.1.0 =
 * Added option for Hijri date roll over time.
 * Ongoing improvements.
+* Compatible with WP 7.1
 
 = 10.0.0 =
 * Core features are rewritten in JS instead of PHP.
